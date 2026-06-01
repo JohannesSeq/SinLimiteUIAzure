@@ -22,9 +22,17 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Cliente } from './types';
 import Card from 'components/card/Card';
 import { FiEdit } from 'react-icons/fi'; // Icono de edición
+
+type Cliente = {
+  id?: string;
+  nombre: string;
+  cedula: string;
+  correo: string;
+  telefono: string;
+  fechaRegistro: string;
+};
 
 const columnHelper = createColumnHelper<Cliente>();
 

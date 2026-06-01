@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 
 type ClienteDetalle = {
   cedula: string;
@@ -57,7 +57,7 @@ const splitFechaHora = (value: string) => {
   };
 };
 
-export default function DetallesCitaPage() {
+function DetallesCitaContent() {
   const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const labelColor = useColorModeValue('gray.500', 'gray.300');
@@ -283,5 +283,13 @@ export default function DetallesCitaPage() {
         </Box>
       }
     </ProtectedRoute>
+  );
+}
+
+export default function DetallesCitaPage() {
+  return (
+    <Suspense fallback={null}>
+      <DetallesCitaContent />
+    </Suspense>
   );
 }

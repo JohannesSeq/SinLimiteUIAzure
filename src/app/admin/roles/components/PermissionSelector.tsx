@@ -40,7 +40,7 @@ export const PERMISSION_CATALOG = [
     module: 'Citas',
     permissions: ['citas.read', 'citas.write', 'citas.delete'],
   },
-] as const;
+];
 
 type PermissionSelectorProps = {
   value: string[];

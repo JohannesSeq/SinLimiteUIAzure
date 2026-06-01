@@ -1,7 +1,7 @@
 'use client';
 import ProtectedRoute from 'components/Auth/ProtectedRoute';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import {
   Alert,
   AlertDescription,
@@ -34,7 +34,7 @@ interface UsuarioResponse {
   Estado?: boolean;
 }
 
-export default function EditarEmpleadoPage() {
+function EditarEmpleadoContent() {
   const apiGatewayUrl =
     process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
   const textColor = useColorModeValue('navy.700', 'white');
@@ -441,5 +441,13 @@ export default function EditarEmpleadoPage() {
         </Flex>
       }
     </ProtectedRoute>
+  );
+}
+
+export default function EditarEmpleadoPage() {
+  return (
+    <Suspense fallback={null}>
+      <EditarEmpleadoContent />
+    </Suspense>
   );
 }

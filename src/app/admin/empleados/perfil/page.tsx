@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   Box,
@@ -28,7 +28,7 @@ interface EmpleadoPerfil {
   };
 }
 
-export default function PerfilEmpleadoPage() {
+function PerfilEmpleadoContent() {
   const apiGatewayUrl =
     process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
   const searchParams = useSearchParams();
@@ -151,5 +151,13 @@ export default function PerfilEmpleadoPage() {
         </Stack>
       </Box>
     </Flex>
+  );
+}
+
+export default function PerfilEmpleadoPage() {
+  return (
+    <Suspense fallback={null}>
+      <PerfilEmpleadoContent />
+    </Suspense>
   );
 }

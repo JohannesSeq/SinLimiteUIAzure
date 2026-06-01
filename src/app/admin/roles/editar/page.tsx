@@ -18,11 +18,11 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import ProtectedRoute from 'components/Auth/ProtectedRoute';
 import PermissionSelector from '../components/PermissionSelector';
 
-export default function EditarRolPage() {
+function EditarRolContent() {
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
   const router = useRouter();
@@ -217,5 +217,13 @@ export default function EditarRolPage() {
         </Flex>
       }
     </ProtectedRoute>
+  );
+}
+
+export default function EditarRolPage() {
+  return (
+    <Suspense fallback={null}>
+      <EditarRolContent />
+    </Suspense>
   );
 }

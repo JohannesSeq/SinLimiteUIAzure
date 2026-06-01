@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import ProtectedRoute from 'components/Auth/ProtectedRoute';
 
 type CatalogOption = {
@@ -23,7 +23,7 @@ type CatalogOption = {
   nombre: string;
 };
 
-export default function CrearEmpleadoPage() {
+function CrearEmpleadoContent() {
   const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const router = useRouter();
@@ -230,5 +230,13 @@ export default function CrearEmpleadoPage() {
       </Box>
     </Flex>
     }</ProtectedRoute>
+  );
+}
+
+export default function CrearEmpleadoPage() {
+  return (
+    <Suspense fallback={null}>
+      <CrearEmpleadoContent />
+    </Suspense>
   );
 }

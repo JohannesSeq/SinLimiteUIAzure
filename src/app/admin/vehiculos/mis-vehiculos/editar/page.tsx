@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { useAuth } from 'contexts/AuthContext';
 
@@ -39,7 +39,7 @@ const getCollection = (payload: unknown) => {
   return [];
 };
 
-export default function EditarMiVehiculoPage() {
+function EditarMiVehiculoContent() {
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const cardBg = useColorModeValue('white', 'navy.800');
   const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
@@ -308,5 +308,13 @@ export default function EditarMiVehiculoPage() {
         </Box>
       </Flex>
     </ProtectedRoute>
+  );
+}
+
+export default function EditarMiVehiculoPage() {
+  return (
+    <Suspense fallback={null}>
+      <EditarMiVehiculoContent />
+    </Suspense>
   );
 }

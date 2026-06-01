@@ -10,13 +10,13 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import RolesTable from './components/UsuariosAsignadosTable';
 import { Usuario } from './types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProtectedRoute from 'components/Auth/ProtectedRoute';
 
-export default function RolesPage() {
+function RolesContent() {
   const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const [busqueda, setBusqueda] = useState('');
@@ -146,5 +146,13 @@ const fetchUsuarios = async () => {
         )}
       </Box>
     }</ProtectedRoute>
+  );
+}
+
+export default function RolesPage() {
+  return (
+    <Suspense fallback={null}>
+      <RolesContent />
+    </Suspense>
   );
 }

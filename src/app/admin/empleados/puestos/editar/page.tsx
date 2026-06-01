@@ -17,9 +17,9 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
-export default function EditarPuestoPage() {
+function EditarPuestoContent() {
   const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const router = useRouter();
@@ -210,5 +210,13 @@ export default function EditarPuestoPage() {
         </Flex>
       }
     </ProtectedRoute>
+  );
+}
+
+export default function EditarPuestoPage() {
+  return (
+    <Suspense fallback={null}>
+      <EditarPuestoContent />
+    </Suspense>
   );
 }

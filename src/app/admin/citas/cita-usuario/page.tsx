@@ -24,6 +24,8 @@ type MeResponse = {
   tipoUsuario?: string;
 };
 
+type ApiRecord = Record<string, unknown>;
+
 type ClienteDetalle = {
   cedula: string;
   nombre: string;
@@ -135,10 +137,14 @@ export default function CitaUsuarioPage() {
         }
 
         const clientesData = await clientesResponse.json();
-        const rawClientes = Array.isArray(clientesData) ? clientesData : clientesData?.data ?? [];
+        const rawClientes: ApiRecord[] = Array.isArray(clientesData)
+          ? clientesData
+          : Array.isArray(clientesData?.data)
+          ? clientesData.data
+          : [];
 
         const clienteEncontrado = rawClientes
-          .map((item: Record<string, unknown>) => ({
+          .map((item) => ({
             cedula: String(item.cedula ?? item.CEDULA ?? item.Cedula ?? ''),
             nombre: String(item.nombre ?? item.NOMBRE ?? item.Nombre ?? ''),
             apellidos: String(item.apellidos ?? item.APELLIDOS ?? item.Apellidos ?? ''),
@@ -163,10 +169,14 @@ export default function CitaUsuarioPage() {
         }
 
         const citasData = await citasResponse.json();
-        const rawCitas = Array.isArray(citasData) ? citasData : citasData?.data ?? [];
+        const rawCitas: ApiRecord[] = Array.isArray(citasData)
+          ? citasData
+          : Array.isArray(citasData?.data)
+          ? citasData.data
+          : [];
 
         const citasDelClienteBase = rawCitas
-          .map((item: Record<string, unknown>) => {
+          .map((item) => {
             const fechaHora = String(item.fechaHora ?? item.FechaHora ?? '');
             const { fecha, hora } = splitFechaHora(fechaHora);
             const clientesRelacion = (item.citasClientes ?? item.CitasClientes ?? []) as Array<

@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 type ClienteOption = {
   cedula: string;
@@ -47,7 +47,7 @@ const splitFechaHora = (value: string) => {
   };
 };
 
-export default function EditarCitaPage() {
+function EditarCitaContent() {
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
   const router = useRouter();
@@ -482,5 +482,13 @@ export default function EditarCitaPage() {
         </Box>
       }
     </ProtectedRoute>
+  );
+}
+
+export default function EditarCitaPage() {
+  return (
+    <Suspense fallback={null}>
+      <EditarCitaContent />
+    </Suspense>
   );
 }

@@ -31,7 +31,7 @@ type Cita = {
   servicio: string;
   fecha: string;
   hora: string;
-  técnico: string;
+  tecnico: string;
   estado: string;
 };
 

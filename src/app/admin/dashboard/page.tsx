@@ -363,12 +363,14 @@ export default function DashboardPage() {
             fetch(`${apiGatewayUrl}/citas`, { credentials: 'include' }),
           ]);
 
-        const failedResponse = [
+        const responses: Array<[string, Response]> = [
           ['Clientes', clientesResponse],
           ['Empleados', empleadosResponse],
           ['Vehiculos', vehiculosResponse],
           ['Citas', citasResponse],
-        ].find(([, response]) => !response.ok);
+        ];
+
+        const failedResponse = responses.find(([, response]) => !response.ok);
 
         if (failedResponse) {
           throw new Error(`${failedResponse[0]}: HTTP ${failedResponse[1].status}`);

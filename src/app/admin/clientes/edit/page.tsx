@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 interface ClienteResponse {
   nombre?: string;
@@ -41,7 +41,7 @@ interface UsuarioResponse {
   Estado?: boolean;
 }
 
-export default function EditarClientePage() {
+function EditarClienteContent() {
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const apiGatewayUrl =
     process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
@@ -408,5 +408,13 @@ export default function EditarClientePage() {
         </Flex>
       }
     </ProtectedRoute>
+  );
+}
+
+export default function EditarClientePage() {
+  return (
+    <Suspense fallback={null}>
+      <EditarClienteContent />
+    </Suspense>
   );
 }

@@ -1,14 +1,15 @@
 // Chakra imports
 import { Flex, Stat, StatLabel, StatNumber, useColorModeValue, Text } from '@chakra-ui/react';
+import type { ReactNode } from 'react';
 // Custom components
 import Card from 'components/card/Card';
 
 export default function Default(props: {
-	startContent?: JSX.Element;
-	endContent?: JSX.Element;
+	startContent?: ReactNode;
+	endContent?: ReactNode;
 	name: string;
 	growth?: string | number;
-	value: string | number;
+	value: ReactNode;
 }) {
 	const { startContent, endContent, name, growth, value } = props;
 	const textColor = useColorModeValue('secondaryGray.900', 'white');
