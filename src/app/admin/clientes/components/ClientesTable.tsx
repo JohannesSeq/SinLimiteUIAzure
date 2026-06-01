@@ -63,7 +63,7 @@ export default function ClientesTable({
         await onDelete(cedula);
       } else {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200'}/clientes/${cedula}`,
+          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net'}/clientes/${cedula}`,
           { method: 'DELETE' }
         );
 

@@ -17,7 +17,7 @@ import { Empleado } from './types';
 import Link from 'next/link';
 
 export default function EmpleadosPage() {
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const [busqueda, setBusqueda] = useState('');
   const [puestoFiltro, setPuestoFiltro] = useState('');

@@ -46,7 +46,7 @@ type EmpleadoRecord = {
 };
 
 export default function EditarPerfilPage() {
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net';
   const textColor = useColorModeValue('navy.700', 'white');
   const router = useRouter();
 

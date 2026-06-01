@@ -25,7 +25,7 @@ type ClienteOption = {
 
 export default function CrearVehiculoPage() {
   const textColor = useColorModeValue('secondaryGray.900', 'white');
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net';
   const router = useRouter();
   const [clientes, setClientes] = useState<ClienteOption[]>([]);
   const [loadingClientes, setLoadingClientes] = useState(true);

@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     fetch(
-      `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? "http://localhost:5200"}/me`,
+      `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? "https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net"}/me`,
       {
         credentials: "include",
       }
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = async () => {
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? "http://localhost:5200"}/logout`,
+        `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? "https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net"}/logout`,
         {
           method: "POST",
           credentials: "include",

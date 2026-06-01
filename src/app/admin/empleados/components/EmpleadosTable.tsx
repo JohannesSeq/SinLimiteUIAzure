@@ -60,7 +60,7 @@ export default function EmpleadosTable({
         await onDelete(empleado.idEmpleado);
       } else {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200'}/empleados/${empleado.idEmpleado}`,
+          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net'}/empleados/${empleado.idEmpleado}`,
           { method: 'DELETE' }
         );
 

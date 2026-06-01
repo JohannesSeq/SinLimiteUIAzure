@@ -30,7 +30,7 @@ interface EmpleadoPerfil {
 
 function PerfilEmpleadoContent() {
   const apiGatewayUrl =
-    process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
+    process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net';
   const searchParams = useSearchParams();
   const idEmpleado = searchParams.get('idEmpleado');
   const textColor = useColorModeValue('navy.700', 'white');

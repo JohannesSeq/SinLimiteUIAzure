@@ -53,7 +53,7 @@ const getCollection = (payload: unknown) => {
 };
 
 export default function CrearCitaClientePage() {
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:5200';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const mutedText = useColorModeValue('gray.500', 'gray.300');
   const router = useRouter();
