@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/6a208d60-d480-48fa-8671-2de93bdbef41/resourceGroups/Sin-limite/providers/Microsoft.Web/sites/sinlimitedev",
+    "appService.deploySubpath": "."
+}
