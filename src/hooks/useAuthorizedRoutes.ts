@@ -4,7 +4,6 @@ import { useAuth } from 'contexts/AuthContext';
 import { IRoute } from 'types/navigation'; // ajusta si es necesario
 
 export const useAuthorizedRoutes = () => { 
-    console.log(routes);//linea debug
     const { user, loading } = useAuth();
 
   const filteredRoutes = useMemo(() => {
@@ -28,12 +27,10 @@ export const useAuthorizedRoutes = () => {
       
       // Ruta pública
       if (!route.scopes || route.scopes.length === 0) {
-        console.log("Ruta sin scopes:" + route.name);//linea debug
         return true;
       }
 
       if (userScopes.size === 0) {
-        console.log("El usuario no tiene scopes o no esta logueado.")
         return false;
       }
 
