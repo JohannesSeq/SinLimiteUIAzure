@@ -51,7 +51,7 @@ export default function UsuariosTable({ data, onDelete }: Props) {
         await onDelete(usuario.idUsuario);
       } else {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net'}/AsignacionRoles/${usuario.idUsuario}`,
+          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online'}/AsignacionRoles/${usuario.idUsuario}`,
           {
             method: 'DELETE',
             credentials: 'include',

@@ -7,7 +7,7 @@ import { Cliente } from './types';
 import * as React from 'react';
 
 export default function ClientesPage() {
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const [clientes, setClientes] = React.useState<Cliente[]>([]);
   const [loading, setLoading] = React.useState(true);

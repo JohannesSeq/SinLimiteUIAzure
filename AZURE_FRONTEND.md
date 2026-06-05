@@ -3,7 +3,7 @@
 This frontend calls the Azure API Gateway through a production fallback compiled in the source code:
 
 ```bash
-https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net
+https://dev.gateway.limitlesscr.online
 ```
 
 Cloud deployments do not require a `.env` file.

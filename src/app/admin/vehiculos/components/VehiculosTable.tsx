@@ -56,7 +56,7 @@ export default function VehiculosTable({
         await onDelete(placa);
       } else {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net'}/vehiculos/${placa}`,
+          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online'}/vehiculos/${placa}`,
           { method: 'DELETE' }
         );
 

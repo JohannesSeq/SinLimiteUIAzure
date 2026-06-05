@@ -91,7 +91,7 @@ const normalizeClientes = (data: unknown) => {
 };
 
 export default function MisVehiculosPage() {
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://sin-limite-api-gatewaydev-exbkdvaucwaad0ey.mexicocentral-01.azurewebsites.net';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const mutedText = useColorModeValue('gray.500', 'gray.300');
   const { user, loading: authLoading } = useAuth();
