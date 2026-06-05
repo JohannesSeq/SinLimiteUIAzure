@@ -10,7 +10,7 @@
 
 <p>&nbsp;</p>
 
-Get started and build your dream web app with Horizon UI NextJS, the most trendiest & innovative Open Source Admin Template for Chakra UI, React & NextJS!
+Get started and build your dream web app with Horizon UI NextJS, the most trendiest & innovative Open Source Admin Template for Chakra UI, React & NextJS!!
 
 ---
 
