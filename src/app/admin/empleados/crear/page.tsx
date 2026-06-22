@@ -160,6 +160,7 @@ export default function CrearEmpleadoPage() {
       !form.apellidos ||
       !form.idPuesto ||
       !form.idDepartamento ||
+      !form.numeroTelefono ||
       !form.correo ||
       !form.password ||
       !form.confirmPassword
@@ -234,9 +235,7 @@ export default function CrearEmpleadoPage() {
       body.append('nombre', form.nombre);
       body.append('apellidos', form.apellidos);
 
-      if (form.numeroTelefono) {
-        body.append('numeroTelefono', Number(form.numeroTelefono).toString());
-      }
+      body.append('numeroTelefono', Number(form.numeroTelefono).toString());
 
       const response = await fetch(`${apiGatewayUrl}/empleados`, {
         method: 'POST',
@@ -418,7 +417,7 @@ export default function CrearEmpleadoPage() {
                   </Select>
                 </FormControl>
 
-                <FormControl>
+                <FormControl isRequired>
                   <FormLabel>Telefono</FormLabel>
                   <Input
                     name="numeroTelefono"

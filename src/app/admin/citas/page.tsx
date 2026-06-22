@@ -44,15 +44,39 @@ export default function CitasPage() {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchCitas = async () => {
+    const fetchAll = async () => {
       try {
-        const response = await fetch(`${apiGatewayUrl}/citas`);
-        if (!response.ok) {
-          throw new Error(`Error HTTP ${response.status}`);
-        }
+        const [citasRes, clientesRes, empleadosRes] = await Promise.all([
+          fetch(`${apiGatewayUrl}/citas`),
+          fetch(`${apiGatewayUrl}/clientes`),
+          fetch(`${apiGatewayUrl}/empleados`),
+        ]);
 
-        const data = await response.json();
-        const rawList = Array.isArray(data) ? data : data?.data ?? [];
+        if (!citasRes.ok) throw new Error(`Error HTTP ${citasRes.status}`);
+
+        const [citasData, clientesData, empleadosData] = await Promise.all([
+          citasRes.json(),
+          clientesRes.ok ? clientesRes.json() : [],
+          empleadosRes.ok ? empleadosRes.json() : [],
+        ]);
+
+        const clienteMap = new Map<string, string>();
+        (Array.isArray(clientesData) ? clientesData : clientesData?.data ?? [])
+          .forEach((c: Record<string, unknown>) => {
+            const cedula = String(c.cedula ?? c.CEDULA ?? c.Cedula ?? '');
+            const nombre = `${c.nombre ?? c.Nombre ?? ''} ${c.apellidos ?? c.Apellidos ?? ''}`.trim();
+            if (cedula) clienteMap.set(cedula, nombre);
+          });
+
+        const empleadoMap = new Map<string, string>();
+        (Array.isArray(empleadosData) ? empleadosData : empleadosData?.data ?? [])
+          .forEach((e: Record<string, unknown>) => {
+            const id = String(e.idEmpleado ?? e.ID_EMPLEADO ?? e.IdEmpleado ?? '');
+            const nombre = `${e.nombre ?? e.Nombre ?? ''} ${e.apellidos ?? e.Apellidos ?? ''}`.trim();
+            if (id) empleadoMap.set(id, nombre);
+          });
+
+        const rawList = Array.isArray(citasData) ? citasData : citasData?.data ?? [];
 
         const normalized = rawList.map((item: Record<string, unknown>) => {
           const fechaHora = String(item.fechaHora ?? item.FechaHora ?? '');
@@ -65,15 +89,20 @@ export default function CitasPage() {
           const firstVehiculo = vehiculos[0] ?? {};
           const firstEmpleado = empleados[0] ?? {};
 
+          const cedulaCliente = String(firstCliente.cedulaCliente ?? firstCliente.CedulaCliente ?? '');
+          const idEmpleado = String(firstEmpleado.idEmpleado ?? firstEmpleado.IdEmpleado ?? '');
+
           return {
             idCita: String(item.idCita ?? item.IdCita ?? ''),
             fecha,
             hora,
             servicio: String(item.servicio ?? item.Servicio ?? ''),
             estado: String(item.estado ?? item.Estado ?? ''),
-            cedulaCliente: String(firstCliente.cedulaCliente ?? firstCliente.CedulaCliente ?? ''),
+            cedulaCliente,
+            nombreCliente: clienteMap.get(cedulaCliente) ?? '',
             placa: String(firstVehiculo.placa ?? firstVehiculo.Placa ?? ''),
-            idEmpleado: String(firstEmpleado.idEmpleado ?? firstEmpleado.IdEmpleado ?? ''),
+            idEmpleado,
+            nombreEmpleado: empleadoMap.get(idEmpleado) ?? '',
           } as Cita;
         });
 
@@ -92,7 +121,7 @@ export default function CitasPage() {
       }
     };
 
-    fetchCitas();
+    fetchAll();
 
     return () => {
       isMounted = false;
@@ -113,16 +142,17 @@ export default function CitasPage() {
   };
 
   const citasFiltradas = citas.filter((cita) => {
-    const coincideTexto =
-      (cita.cedulaCliente || '').toLowerCase().includes(filtroTexto.toLowerCase()) ||
-      (cita.idEmpleado || '').toLowerCase().includes(filtroTexto.toLowerCase()) ||
-      (cita.placa || '').toLowerCase().includes(filtroTexto.toLowerCase());
+    const texto = filtroTexto.toLowerCase();
+    const coincide =
+      !filtroTexto ||
+      (cita.nombreCliente || cita.cedulaCliente || '').toLowerCase().includes(texto) ||
+      (cita.nombreEmpleado || cita.idEmpleado || '').toLowerCase().includes(texto);
 
     const dentroDeRango =
       (!fechaDesde || cita.fecha >= fechaDesde) &&
       (!fechaHasta || cita.fecha <= fechaHasta);
 
-    return coincideTexto && dentroDeRango;
+    return coincide && dentroDeRango;
   });
 
   return (
@@ -144,17 +174,19 @@ export default function CitasPage() {
             flexWrap="wrap"
             justify="space-between"
           >
-            <InputGroup maxW="300px">
-              <InputLeftElement pointerEvents="none">
-                <SearchIcon color="gray.400" />
-              </InputLeftElement>
-              <Input
-                type="text"
-                placeholder="Buscar por cliente o técnico"
-                value={filtroTexto}
-                onChange={(e) => setFiltroTexto(e.target.value)}
-              />
-            </InputGroup>
+            <Flex gap={3} flexWrap="wrap">
+              <InputGroup maxW="280px">
+                <InputLeftElement pointerEvents="none">
+                  <SearchIcon color="gray.400" />
+                </InputLeftElement>
+                <Input
+                  type="text"
+                  placeholder="Buscar cliente o técnico"
+                  value={filtroTexto}
+                  onChange={(e) => setFiltroTexto(e.target.value)}
+                />
+              </InputGroup>
+            </Flex>
 
             <Flex gap={4} flexWrap="wrap" align="flex-end">
               <Flex gap={3} align="flex-end">

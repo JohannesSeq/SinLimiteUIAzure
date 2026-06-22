@@ -39,6 +39,9 @@ export default function ClientesPage() {
           apellidos: String(
             item.apellidos ?? item.APELLIDOS ?? item.Apellidos ?? ''
           ),
+          correo: String(
+            item.correo ?? item.CORREO ?? item.Correo ?? item.email ?? item.Email ?? ''
+          ),
           numeroTelefono: String(
             item.numeroTelefono ??
               item.numeroDeTelefono ??

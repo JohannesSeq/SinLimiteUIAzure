@@ -5,6 +5,9 @@ import {
   Button,
   Flex,
   IconButton,
+  Input,
+  InputGroup,
+  InputLeftElement,
   Table,
   Tbody,
   Td,
@@ -15,6 +18,7 @@ import {
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react';
+import { SearchIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import * as React from 'react';
 import {
@@ -41,6 +45,7 @@ export default function ClientesTable({
   const toast = useToast();
 
   const [deletingCedula, setDeletingCedula] = React.useState<string | null>(null);
+  const [filtroTexto, setFiltroTexto] = React.useState('');
 
   const handleDelete = async (cedula: string) => {
     const Swal = (await import('sweetalert2')).default;
@@ -143,23 +148,50 @@ export default function ClientesTable({
     }),
   ];
 
+  const clientesFiltrados = React.useMemo(() => {
+    if (!filtroTexto) return data;
+    const texto = filtroTexto.toLowerCase();
+    return data.filter(
+      (c) =>
+        c.nombre.toLowerCase().includes(texto) ||
+        c.apellidos.toLowerCase().includes(texto) ||
+        c.cedula.toLowerCase().includes(texto) ||
+        c.correo.toLowerCase().includes(texto)
+    );
+  }, [data, filtroTexto]);
+
   const table = useReactTable({
-    data,
+    data: clientesFiltrados,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
     <Card flexDirection="column" w="100%" px="0px" overflowX="auto">
-      <Flex justify="space-between" align="center" px={6} py={4}>
-        <Text fontSize="xl" fontWeight="bold" color={textColor}>
+      <Flex justify="space-between" align="center" px={6} py={4} gap={4}>
+        <Text fontSize="xl" fontWeight="bold" color={textColor} flexShrink={0}>
           Clientes
         </Text>
-        <Link href="/admin/clientes/create">
-          <Button colorScheme="blue" size="sm">
-            + Crear cliente
-          </Button>
-        </Link>
+        <Flex gap={3} align="center" flex={1} justify="flex-end">
+          <InputGroup maxW="260px">
+            <InputLeftElement pointerEvents="none">
+              <SearchIcon color="gray.400" />
+            </InputLeftElement>
+            <Input
+              type="text"
+              placeholder="Buscar por nombre, cédula o correo"
+              value={filtroTexto}
+              onChange={(e) => setFiltroTexto(e.target.value)}
+              size="sm"
+              borderRadius="md"
+            />
+          </InputGroup>
+          <Link href="/admin/clientes/create">
+            <Button colorScheme="blue" size="sm" flexShrink={0}>
+              + Crear cliente
+            </Button>
+          </Link>
+        </Flex>
       </Flex>
 
       <Box>
@@ -176,15 +208,23 @@ export default function ClientesTable({
             ))}
           </Thead>
           <Tbody>
-            {table.getRowModel().rows.map((row) => (
-              <Tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <Td key={cell.id} borderColor="transparent" fontSize="sm">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Td>
-                ))}
+            {table.getRowModel().rows.length > 0 ? (
+              table.getRowModel().rows.map((row) => (
+                <Tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <Td key={cell.id} borderColor="transparent" fontSize="sm">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </Td>
+                  ))}
+                </Tr>
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={columns.length} textAlign="center" py={6} color="gray.400">
+                  No se encontraron resultados
+                </Td>
               </Tr>
-            ))}
+            )}
           </Tbody>
         </Table>
       </Box>

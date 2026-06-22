@@ -98,8 +98,8 @@ export default function CitasTable({
           {data.map((cita) => (
             <Tr key={cita.idCita}>
               <Td>{cita.idCita}</Td>
-              <Td>{cita.cedulaCliente || 'Sin asignar'}</Td>
-              <Td>{cita.idEmpleado || 'Sin asignar'}</Td>
+              <Td>{cita.nombreCliente || cita.cedulaCliente || 'Sin asignar'}</Td>
+              <Td>{cita.nombreEmpleado || cita.idEmpleado || 'Sin asignar'}</Td>
               <Td>{cita.placa || 'Sin asignar'}</Td>
               <Td>{cita.fecha}</Td>
               <Td>{cita.hora}</Td>
