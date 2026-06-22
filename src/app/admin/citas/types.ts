@@ -5,6 +5,8 @@ export type Cita = {
   servicio: string;
   estado: string;
   cedulaCliente?: string;
+  nombreCliente?: string;
   placa?: string;
   idEmpleado?: string;
+  nombreEmpleado?: string;
 };

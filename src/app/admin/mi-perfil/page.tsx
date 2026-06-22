@@ -15,6 +15,8 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useDisclosure } from '@chakra-ui/react';
+import EliminarCuentaModal from './EliminarCuentaModal';
 
 interface MeResponse {
   id: string;
@@ -28,6 +30,7 @@ export default function MiPerfilPage() {
   const [user, setUser] = useState<MeResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const apiGatewayUrl =
     process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
   const textColor = useColorModeValue('navy.700', 'white');
@@ -158,7 +161,18 @@ export default function MiPerfilPage() {
                   Cambiar contraseña
                 </Button>
               </Link>
+              <Button colorScheme="red" variant="outline" onClick={onOpen}>
+                Eliminar cuenta
+              </Button>
             </Flex>
+
+            <EliminarCuentaModal
+              isOpen={isOpen}
+              onClose={onClose}
+              idUsuario={user?.id ?? ''}
+              tipoUsuario={user?.tipoUsuario ?? ''}
+              apiGatewayUrl={apiGatewayUrl}
+            />
           </>
         )}
       </Box>

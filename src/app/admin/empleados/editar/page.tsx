@@ -140,6 +140,9 @@ function EditarEmpleadoContent() {
             }))
           );
 
+          const puesto = (empleado.puesto ?? empleado.Puesto ?? {}) as Record<string, unknown>;
+          const departamento = (empleado.departamento ?? empleado.Departamento ?? {}) as Record<string, unknown>;
+
           setForm({
             nombre: String(empleado.nombre ?? empleado.NOMBRE ?? empleado.Nombre ?? ''),
             apellidos: String(
@@ -154,13 +157,12 @@ function EditarEmpleadoContent() {
                 ''
             ),
             idPuesto: String(
+              puesto.idPuesto ?? puesto.IdPuesto ??
               empleado.idPuesto ?? empleado.ID_PUESTO ?? empleado.IdPuesto ?? ''
             ),
             idDepartamento: String(
-              empleado.idDepartamento ??
-                empleado.ID_DEPARTAMENTO ??
-                empleado.IdDepartamento ??
-                ''
+              departamento.idDepartamento ?? departamento.IdDepartamento ??
+              empleado.idDepartamento ?? empleado.ID_DEPARTAMENTO ?? empleado.IdDepartamento ?? ''
             ),
             idUsuario: empleadoIdUsuario,
             correo: correoUsuario,
