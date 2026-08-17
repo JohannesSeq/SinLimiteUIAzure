@@ -25,7 +25,7 @@ import PermissionSelector from '../components/PermissionSelector';
 
 export default function CrearRolPage() {
   const textColor = useColorModeValue('secondaryGray.900', 'white');
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://prod.gateway.limitlesscr.online';
   const router = useRouter();
   const [form, setForm] = useState({
     nombreRol: '',

@@ -16,7 +16,7 @@ import DepartamentosTable from './components/DepartamentosTable';
 import { Departamento } from './types';
 
 export default function DepartamentosPage() {
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://prod.gateway.limitlesscr.online';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const [busqueda, setBusqueda] = useState('');
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);

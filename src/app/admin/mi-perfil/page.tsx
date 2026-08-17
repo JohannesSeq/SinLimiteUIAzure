@@ -29,7 +29,7 @@ export default function MiPerfilPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const apiGatewayUrl =
-    process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
+    process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://prod.gateway.limitlesscr.online';
   const textColor = useColorModeValue('navy.700', 'white');
   const cardBg = useColorModeValue('white', 'navy.800');
   const secondaryText = useColorModeValue('gray.600', 'gray.300');

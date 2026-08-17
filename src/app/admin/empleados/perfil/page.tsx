@@ -30,7 +30,7 @@ interface EmpleadoPerfil {
 
 function PerfilEmpleadoContent() {
   const apiGatewayUrl =
-    process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
+    process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://prod.gateway.limitlesscr.online';
   const searchParams = useSearchParams();
   const idEmpleado = searchParams.get('idEmpleado');
   const textColor = useColorModeValue('navy.700', 'white');

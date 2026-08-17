@@ -50,7 +50,7 @@ export default function RolesTable({ data, onDelete }: Props) {
         await onDelete(rol.idRol);
       } else {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online'}/roles/${rol.idRol}`,
+          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://prod.gateway.limitlesscr.online'}/roles/${rol.idRol}`,
           {
             method: 'DELETE',
             credentials: 'include',

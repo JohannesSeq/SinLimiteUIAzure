@@ -37,7 +37,7 @@ const normalizeCliente = (data: unknown): ClienteActual => {
 };
 
 export default function RegistrarMiVehiculoPage() {
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://prod.gateway.limitlesscr.online';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const cardBg = useColorModeValue('white', 'navy.800');
   const { user, loading: authLoading } = useAuth();

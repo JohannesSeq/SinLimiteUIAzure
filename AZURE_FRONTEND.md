@@ -3,7 +3,7 @@
 This frontend calls the Azure API Gateway through a production fallback compiled in the source code:
 
 ```bash
-https://dev.gateway.limitlesscr.online
+https://prod.gateway.limitlesscr.online
 ```
 
 Cloud deployments do not require a `.env` file.

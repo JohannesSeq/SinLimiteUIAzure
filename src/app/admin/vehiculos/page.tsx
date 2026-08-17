@@ -16,7 +16,7 @@ import VehiculosTable from './components/VehiculosTable';
 import { Vehiculo } from './types';
 
 export default function VehiculosPage() {
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://prod.gateway.limitlesscr.online';
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const [busqueda, setBusqueda] = useState('');
   const [vehiculos, setVehiculos] = useState<Vehiculo[]>([]);

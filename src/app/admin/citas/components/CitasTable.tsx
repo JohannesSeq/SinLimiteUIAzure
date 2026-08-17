@@ -48,7 +48,7 @@ export default function CitasTable({
         await onDelete(idCita);
       } else {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online'}/citas/${idCita}`,
+          `${process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://prod.gateway.limitlesscr.online'}/citas/${idCita}`,
           { method: 'DELETE' }
         );
 

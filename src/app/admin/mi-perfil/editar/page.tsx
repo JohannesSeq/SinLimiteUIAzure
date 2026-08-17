@@ -46,7 +46,7 @@ type EmpleadoRecord = {
 };
 
 export default function EditarPerfilPage() {
-  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://dev.gateway.limitlesscr.online';
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://prod.gateway.limitlesscr.online';
   const textColor = useColorModeValue('navy.700', 'white');
   const router = useRouter();
 
