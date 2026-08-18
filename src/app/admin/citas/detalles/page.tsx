@@ -34,6 +34,14 @@ type VehiculoDetalle = {
   tipo: string;
 };
 
+type EmpleadoDetalle = {
+  idEmpleado: string;
+  nombre: string;
+  apellidos: string;
+  numeroTelefono: string;
+  puesto: string;
+};
+
 type CitaDetalle = {
   idCita: string;
   fecha: string;
@@ -68,6 +76,7 @@ function DetallesCitaContent() {
   const [cita, setCita] = useState<CitaDetalle | null>(null);
   const [cliente, setCliente] = useState<ClienteDetalle | null>(null);
   const [vehiculo, setVehiculo] = useState<VehiculoDetalle | null>(null);
+  const [empleado, setEmpleado] = useState<EmpleadoDetalle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -121,6 +130,7 @@ function DetallesCitaContent() {
 
         let clienteDetalle: ClienteDetalle | null = null;
         let vehiculoDetalle: VehiculoDetalle | null = null;
+        let empleadoDetalle: EmpleadoDetalle | null = null;
 
         if (citaBase.cedulaCliente) {
           const clienteResponse = await fetch(`${apiGatewayUrl}/clientes/${citaBase.cedulaCliente}`);
@@ -154,11 +164,41 @@ function DetallesCitaContent() {
           }
         }
 
+        if (citaBase.idEmpleado) {
+          const empleadoResponse = await fetch(
+            `${apiGatewayUrl}/empleados/${citaBase.idEmpleado}`
+          );
+          if (empleadoResponse.ok) {
+            const empleadoData = (await empleadoResponse.json()) as Record<string, unknown>;
+            const puestoData = (empleadoData.puesto ?? empleadoData.Puesto ?? {}) as Record<
+              string,
+              unknown
+            >;
+            empleadoDetalle = {
+              idEmpleado: String(
+                empleadoData.idEmpleado ?? empleadoData.IdEmpleado ?? citaBase.idEmpleado
+              ),
+              nombre: String(empleadoData.nombre ?? empleadoData.Nombre ?? ''),
+              apellidos: String(empleadoData.apellidos ?? empleadoData.Apellidos ?? ''),
+              numeroTelefono: String(
+                empleadoData.numeroTelefono ??
+                  empleadoData.numeroDeTelefono ??
+                  empleadoData.NumeroDeTelefono ??
+                  ''
+              ),
+              puesto: String(
+                puestoData.nombrePuesto ?? puestoData.NombrePuesto ?? 'Sin puesto'
+              ),
+            };
+          }
+        }
+
         if (!isMounted) return;
 
         setCita(citaBase);
         setCliente(clienteDetalle);
         setVehiculo(vehiculoDetalle);
+        setEmpleado(empleadoDetalle);
       } catch (fetchError) {
         if (isMounted) {
           setError(
@@ -184,6 +224,10 @@ function DetallesCitaContent() {
   const clienteNombreCompleto = useMemo(() => {
     return [cliente?.nombre, cliente?.apellidos].filter(Boolean).join(' ');
   }, [cliente?.apellidos, cliente?.nombre]);
+
+  const empleadoNombreCompleto = useMemo(() => {
+    return [empleado?.nombre, empleado?.apellidos].filter(Boolean).join(' ');
+  }, [empleado?.apellidos, empleado?.nombre]);
 
   return (
     <ProtectedRoute requiredScopes={['citas.read']}>
@@ -211,7 +255,7 @@ function DetallesCitaContent() {
             <Text color="gray.500">No se encontro la cita solicitada.</Text>
           ) : (
             <Box bg={cardBg} borderRadius="lg" boxShadow="md" p={6}>
-              <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
                 <Box>
                   <Text fontWeight="bold" color={labelColor} mb={3}>
                     Cita
@@ -231,9 +275,6 @@ function DetallesCitaContent() {
                     </Text>
                     <Text color={textColor}>
                       <strong>Estado:</strong> {cita.estado || 'Sin estado'}
-                    </Text>
-                    <Text color={textColor}>
-                      <strong>ID Empleado:</strong> {cita.idEmpleado || 'Sin asignar'}
                     </Text>
                   </Stack>
                 </Box>
@@ -276,6 +317,34 @@ function DetallesCitaContent() {
                       <strong>Año:</strong> {vehiculo?.year || 'Sin año'}
                     </Text>
                   </Stack>
+                </Box>
+
+                <Box>
+                  <Text fontWeight="bold" color={labelColor} mb={3}>
+                    Empleado asignado
+                  </Text>
+                  {!cita.idEmpleado ? (
+                    <Text color={textColor}>La cita no se encuentra asignada.</Text>
+                  ) : empleado ? (
+                    <Stack spacing={2}>
+                      <Text color={textColor}>
+                        <strong>Nombre:</strong> {empleadoNombreCompleto || 'Sin nombre'}
+                      </Text>
+                      <Text color={textColor}>
+                        <strong>Puesto:</strong> {empleado.puesto}
+                      </Text>
+                      <Text color={textColor}>
+                        <strong>Telefono:</strong> {empleado.numeroTelefono || 'Sin telefono'}
+                      </Text>
+                      <Text color={textColor}>
+                        <strong>ID:</strong> {empleado.idEmpleado}
+                      </Text>
+                    </Stack>
+                  ) : (
+                    <Text color={textColor}>
+                      No se pudo cargar la informacion del empleado asignado.
+                    </Text>
+                  )}
                 </Box>
               </SimpleGrid>
             </Box>

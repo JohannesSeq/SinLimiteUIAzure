@@ -42,6 +42,14 @@ type VehiculoDetalle = {
   tipo: string;
 };
 
+type EmpleadoDetalle = {
+  idEmpleado: string;
+  nombre: string;
+  apellidos: string;
+  numeroTelefono: string;
+  puesto: string;
+};
+
 type CitaUsuario = {
   idCita: string;
   fecha: string;
@@ -52,6 +60,7 @@ type CitaUsuario = {
   idEmpleado: string;
   placa: string;
   vehiculo: VehiculoDetalle | null;
+  empleado: EmpleadoDetalle | null;
 };
 
 const splitFechaHora = (value: string) => {
@@ -175,6 +184,36 @@ export default function CitaUsuarioPage() {
           ? citasData.data
           : [];
 
+        const empleadosResponse = await fetch(`${apiGatewayUrl}/empleados`);
+        const empleadosData = empleadosResponse.ok ? await empleadosResponse.json() : [];
+        const rawEmpleados: ApiRecord[] = Array.isArray(empleadosData)
+          ? empleadosData
+          : Array.isArray(empleadosData?.data)
+          ? empleadosData.data
+          : [];
+        const empleadosPorId = new Map(
+          rawEmpleados.map((item) => {
+            const puesto = (item.puesto ?? item.Puesto ?? {}) as ApiRecord;
+            const empleado = {
+              idEmpleado: String(item.idEmpleado ?? item.ID_EMPLEADO ?? item.IdEmpleado ?? ''),
+              nombre: String(item.nombre ?? item.NOMBRE ?? item.Nombre ?? ''),
+              apellidos: String(item.apellidos ?? item.APELLIDOS ?? item.Apellidos ?? ''),
+              numeroTelefono: String(
+                item.numeroTelefono ??
+                  item.numeroDeTelefono ??
+                  item.NUMERO_DE_TELEFONO ??
+                  item.NumeroDeTelefono ??
+                  ''
+              ),
+              puesto: String(
+                puesto.nombrePuesto ?? puesto.NOMBRE_PUESTO ?? puesto.NombrePuesto ?? 'Sin puesto'
+              ),
+            } satisfies EmpleadoDetalle;
+
+            return [empleado.idEmpleado, empleado] as const;
+          })
+        );
+
         const citasDelClienteBase = rawCitas
           .map((item) => {
             const fechaHora = String(item.fechaHora ?? item.FechaHora ?? '');
@@ -206,19 +245,21 @@ export default function CitaUsuarioPage() {
               ),
             };
           })
-          .filter((cita: Omit<CitaUsuario, 'vehiculo'>) => {
+          .filter((cita: Omit<CitaUsuario, 'vehiculo' | 'empleado'>) => {
             return cita.cedulaCliente === clienteEncontrado.cedula;
           });
 
         const citasConVehiculo = await Promise.all(
-          citasDelClienteBase.map(async (citaBase: Omit<CitaUsuario, 'vehiculo'>) => {
+          citasDelClienteBase.map(async (citaBase: Omit<CitaUsuario, 'vehiculo' | 'empleado'>) => {
+            const empleado = empleadosPorId.get(citaBase.idEmpleado) ?? null;
+
             if (!citaBase.placa) {
-              return { ...citaBase, vehiculo: null } satisfies CitaUsuario;
+              return { ...citaBase, vehiculo: null, empleado } satisfies CitaUsuario;
             }
 
             const vehiculoResponse = await fetch(`${apiGatewayUrl}/vehiculos/${citaBase.placa}`);
             if (!vehiculoResponse.ok) {
-              return { ...citaBase, vehiculo: null } satisfies CitaUsuario;
+              return { ...citaBase, vehiculo: null, empleado } satisfies CitaUsuario;
             }
 
             const vehiculoData = (await vehiculoResponse.json()) as Record<string, unknown>;
@@ -232,6 +273,7 @@ export default function CitaUsuarioPage() {
                 year: String(vehiculoData.year ?? vehiculoData.Year ?? ''),
                 tipo: String(vehiculoData.tipo ?? vehiculoData.Tipo ?? ''),
               },
+              empleado,
             } satisfies CitaUsuario;
           })
         );
@@ -400,7 +442,7 @@ export default function CitaUsuarioPage() {
                     </Button>
                   </Flex>
 
-                  <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+                  <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
                     <Box>
                       <Text fontWeight="bold" color={labelColor} mb={3}>
                         Detalle de la cita
@@ -414,9 +456,6 @@ export default function CitaUsuarioPage() {
                         </Text>
                         <Text color={textColor}>
                           <strong>Servicio:</strong> {cita.servicio || 'Sin servicio'}
-                        </Text>
-                        <Text color={textColor}>
-                          <strong>ID Empleado:</strong> {cita.idEmpleado || 'Sin asignar'}
                         </Text>
                       </Stack>
                     </Box>
@@ -461,6 +500,38 @@ export default function CitaUsuarioPage() {
                           <strong>Año:</strong> {cita.vehiculo?.year || 'Sin año'}
                         </Text>
                       </Stack>
+                    </Box>
+
+                    <Box>
+                      <Text fontWeight="bold" color={labelColor} mb={3}>
+                        Empleado asignado
+                      </Text>
+                      {!cita.idEmpleado ? (
+                        <Text color={textColor}>La cita no se encuentra asignada.</Text>
+                      ) : cita.empleado ? (
+                        <Stack spacing={2}>
+                          <Text color={textColor}>
+                            <strong>Nombre:</strong>{' '}
+                            {[cita.empleado.nombre, cita.empleado.apellidos]
+                              .filter(Boolean)
+                              .join(' ') || 'Sin nombre'}
+                          </Text>
+                          <Text color={textColor}>
+                            <strong>Puesto:</strong> {cita.empleado.puesto}
+                          </Text>
+                          <Text color={textColor}>
+                            <strong>Telefono:</strong>{' '}
+                            {cita.empleado.numeroTelefono || 'Sin telefono'}
+                          </Text>
+                          <Text color={textColor}>
+                            <strong>ID:</strong> {cita.empleado.idEmpleado}
+                          </Text>
+                        </Stack>
+                      ) : (
+                        <Text color={textColor}>
+                          No se pudo cargar la informacion del empleado asignado.
+                        </Text>
+                      )}
                     </Box>
                   </SimpleGrid>
                 </Box>
