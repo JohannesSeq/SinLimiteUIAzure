@@ -163,16 +163,24 @@ const normalizeClientes = (payload: unknown): Cliente[] =>
 const normalizeEmpleados = (payload: unknown): Empleado[] =>
   getCollection(payload).map((item) => {
     const record = item as Record<string, unknown>;
+    const puesto = record.puesto ?? record.Puesto;
+    const puestoRecord =
+      puesto && typeof puesto === 'object' && !Array.isArray(puesto)
+        ? (puesto as Record<string, unknown>)
+        : {};
+
     return {
       idEmpleado: Number(record.idEmpleado ?? record.ID_EMPLEADO ?? record.IdEmpleado ?? 0),
       nombre: String(record.nombre ?? record.NOMBRE ?? record.Nombre ?? ''),
       apellidos: String(record.apellidos ?? record.APELLIDOS ?? record.Apellidos ?? ''),
       puesto: String(
         record.nombrePuesto ??
-          record.puesto ??
-          record.Puesto ??
           record.NombrePuesto ??
           record.nombreDelPuesto ??
+          puestoRecord.nombrePuesto ??
+          puestoRecord.NOMBRE_PUESTO ??
+          puestoRecord.NombrePuesto ??
+          (typeof puesto === 'string' ? puesto : '') ??
           ''
       ),
     };
